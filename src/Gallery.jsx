@@ -51,23 +51,31 @@ class Gallery extends Component {
                             className="track"
                             onClick={() => this.playAudio(track.preview_url)}
                         >
-                            <img
-                                src={trackImg}
-                                alt="track"
-                                className="track-img"
-                            />
-                            <div className="track-play">
-                                <div className="track-play-inner">
-                                    {
-                                        this.state.playingUrl === track.preview_url
-                                            ? <span>| |</span>
-                                            : <span>&#9654;</span>
-                                    }
-                                </div>
-                            </div>
-                            <p className="track-text">
-                                {track.name}
-                            </p>
+                            {
+                                track.preview_url === null ?
+                                    <div>
+                                    </div>
+                                    :
+                                    <div>
+                                        <img
+                                            src={trackImg}
+                                            alt="track"
+                                            className="track-img"
+                                        />
+                                        <div className="track-play">
+                                            <div className="track-play-inner">
+                                                {
+                                                    this.state.playingUrl === track.preview_url
+                                                        ? <span>| |</span>
+                                                        : <span>&#9654;</span>
+                                                }
+                                            </div>
+                                        </div>
+                                        <p className="track-text">
+                                            {track.name}
+                                        </p>
+                                    </div>
+                            }
 
                         </div>
                     )

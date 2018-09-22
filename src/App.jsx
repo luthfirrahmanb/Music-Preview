@@ -20,7 +20,7 @@ class App extends Component {
         const BASE_URL = 'https://api.spotify.com/v1/search?';
         let FETCH_URL = `${BASE_URL}q=${this.state.query}&type=artist&limit=1`;
         const ALBUM_URL = 'https://api.spotify.com/v1/artists/';
-        let accessToken = 'BQBQeBuhpHMrWCwoEy4Ona-c-vYmbQDzIqp9zIwGYbDI-k6LGRbg101afA-wQXXtgh2KnOS0leiRpvY6Uo8fdqbVP-HjlYoaxF093d69YZgIPHZjy6-GKUAWXt0zwZ7u3TRZ9QLnsvW4FJhJyrvIBeKC2RIAKdZKNBM5gdwcgaYdRt3Fcaw&refresh_token=AQAJFGpx_-wLkhHc8_BiIFNfOcvxLuI095A5ESj5DWLReCvwV3szBTE8l0RxoPZdsGDYBVRc4u0lhWLJLyxU1k4O0ORJE9eteKhGqHy7oXNcyCXVn_hl-IBgqy7J3HTh6JI';
+        let accessToken = 'BQBw2dwiyNI4ghxJGN6OBj9fwoYkC9eUJU-YmEh99Y2ZCBbIgZdYVezLdUaa407dvKLIGiSn5sDtmUnIR1r4ir_Zpvqf_JA7hTB6iymC4zk1NNrZ9EgW7rLpXsF7Kl11C38VtnKtJu0LBtNT_sQU5BjKis6HW1Aqfl7H9yqzIIi6HQ1eM-dh';
 
         let options = {
             method: 'GET',
@@ -35,14 +35,12 @@ class App extends Component {
             .then(response => response.json())
             .then(json => {
                 const artist = json.artists.items[0];
-                console.log('artist', artist);
                 this.setState({ artist });
 
                 FETCH_URL = `${ALBUM_URL}${artist.id}/top-tracks?country=US&`
                 fetch(FETCH_URL, options)
                     .then(response => response.json())
                     .then(json => {
-                        console.log('artist top track', json);
                         const { tracks } = json;
                         this.setState({ tracks });
                     })
@@ -54,14 +52,14 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                <div className="App-title">Music master</div>
+                <div className="App-title">Music Preview</div>
                 <FormGroup>
                     <InputGroup>
                         <FormControl
                             type="text"
                             placeholder="Search for an artist"
                             value={this.state.query}
-                            onChange={event => { this.setState({ query: event.target.value }) }}
+                            onChange={event => { this.setState({ query: event.target.value })}}
                             onKeyPress={event => {
                                 if (event.key === 'Enter') {
                                     this.search()
