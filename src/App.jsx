@@ -11,45 +11,51 @@ class App extends Component {
 
         this.state = {
             query: '',
+            tokens: '',
             artist: null,
             tracks: []
         }
     }
 
     search() {
-        const BASE_URL = 'https://api.spotify.com/v1/search?';
-        let FETCH_URL = `${BASE_URL}q=${this.state.query}&type=artist&limit=1`;
-        const ALBUM_URL = 'https://api.spotify.com/v1/artists/';
-        let accessToken = 'BQBw2dwiyNI4ghxJGN6OBj9fwoYkC9eUJU-YmEh99Y2ZCBbIgZdYVezLdUaa407dvKLIGiSn5sDtmUnIR1r4ir_Zpvqf_JA7hTB6iymC4zk1NNrZ9EgW7rLpXsF7Kl11C38VtnKtJu0LBtNT_sQU5BjKis6HW1Aqfl7H9yqzIIi6HQ1eM-dh';
+        if (this.state.query === '') {
+            alert('Can\'t Search blank Query')
+        } else {
+            const BASE_URL = 'https://api.spotify.com/v1/search?';
+            let FETCH_URL = `${BASE_URL}q=${this.state.query}&type=artist&limit=1`;
+            const ALBUM_URL = 'https://api.spotify.com/v1/artists/';
+            let accessToken = this.state.tokens;
 
-        let options = {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + accessToken
-            },
-            mode: 'cors',
-            cache: 'default'
-        };
+            let options = {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + accessToken
+                },
+                mode: 'cors',
+                cache: 'default'
+            };
 
-        fetch(FETCH_URL, options)
-            .then(response => response.json())
-            .then(json => {
-                const artist = json.artists.items[0];
-                this.setState({ artist });
+            fetch(FETCH_URL, options)
+                .then(response => response.json())
+                .then(json => {
+                    const artist = json.artists.items[0];
+                    this.setState({ artist });
 
-                FETCH_URL = `${ALBUM_URL}${artist.id}/top-tracks?country=US&`
-                fetch(FETCH_URL, options)
-                    .then(response => response.json())
-                    .then(json => {
-                        const { tracks } = json;
-                        this.setState({ tracks });
-                    })
+                    FETCH_URL = `${ALBUM_URL}${artist.id}/top-tracks?country=US&`
+                    fetch(FETCH_URL, options)
+                        .then(response => response.json())
+                        .then(json => {
+                            const { tracks } = json;
+                            this.setState({ tracks });
+                        })
 
-            })
+                })
+        }
 
     }
 
     render() {
+        console.log(this.state.tokens)
         return (
             <div className="App">
                 <div className="App-title">Music Preview</div>
@@ -57,9 +63,23 @@ class App extends Component {
                     <InputGroup>
                         <FormControl
                             type="text"
+                            placeholder="Input your Tokens"
+                            value={this.state.tokens}
+                            onChange={event => { this.setState({ tokens: event.target.value }) }}
+                            onKeyPress={event => {
+                                if (event.key === 'Enter') {
+                                    this.setState({ tokens: event.target.value })
+                                }
+                            }}
+                        />
+                    </InputGroup>
+                    <br />
+                    <InputGroup>
+                        <FormControl
+                            type="text"
                             placeholder="Search for an artist"
                             value={this.state.query}
-                            onChange={event => { this.setState({ query: event.target.value })}}
+                            onChange={event => { this.setState({ query: event.target.value }) }}
                             onKeyPress={event => {
                                 if (event.key === 'Enter') {
                                     this.search()
